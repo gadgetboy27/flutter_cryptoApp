@@ -7,8 +7,7 @@ class ProdCryptoRepository implements CryptoRepository {
   String cryptoUrl = "https://api.coinmarketcap.com/v1/ticker/?limit=50";
   @override
   Future<List<Crypto>> fetchCurrencies() async {
-    // TODO: implement fetchCurrencies
-    http.Response response = await http.get(cryptoUrl);
+    http.Response response = await http.get(Uri.parse(cryptoUrl));
     final List responseBody = json.decode(response.body);
     final statusCode = response.statusCode;
     if (statusCode != 200 || responseBody == null) {

@@ -12,7 +12,7 @@ class _HomePageState extends State<HomePage> implements CryptoListViewContract {
   CryptoListPresenter _presenter;
   List<Crypto> _currencies;
   bool _isLoading;
-  final List<MaterialColor> _colors = [Colors.blue, Colors.indigo, Colors.red];
+  final List<MaterialColor> colors = [Colors.blue, Colors.indigo, Colors.red];
 
   _HomePageState() {
     _presenter = new CryptoListPresenter(this);
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> implements CryptoListViewContract {
       title: new Text(currency.name,
           style: new TextStyle(fontWeight: FontWeight.bold)),
       subtitle:
-      _getSubtitleText(currency.price_usd, currency.percent_change_1h),
+      _getSubtitleText(currency.price, currency.percentChange_1h),
       isThreeLine: true,
     );
   }
@@ -92,7 +92,6 @@ class _HomePageState extends State<HomePage> implements CryptoListViewContract {
 
   @override
   void onLoadCryptoComplete(List<Crypto> items) {
-    // TODO: implement onLoadCryptoComplete
 
     setState(() {
       _currencies = items;
@@ -102,6 +101,5 @@ class _HomePageState extends State<HomePage> implements CryptoListViewContract {
 
   @override
   void onLoadCryptoError() {
-    // TODO: implement onLoadCryptoError
   }
 }
