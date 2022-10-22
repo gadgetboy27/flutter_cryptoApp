@@ -1,22 +1,35 @@
-import 'dart:async';
+import 'package:fluttercrypto/utils/crypto_data_source.dart';
 
 class Crypto {
-  String name;
-  String price;
-  String percentChange_1h;
-  String symbol;
+  final int rank;
+  final String id;
+  final String name;
+  final String image;
+  final double price;
+  final String symbol;
+  final int marketCap;
+  final double percentChange_1h;
 
-  Crypto({this.name, this.price, this.percentChange_1h,this.symbol});
+  const Crypto({
+    required this.id,
+    required this.name,
+    required this.rank,
+    required this.image,
+    required this.price,
+    required this.symbol,
+    required this.marketCap,
+    required this.percentChange_1h,
+  });
 
-  Crypto.fromMap(Map<String, dynamic> map)
-      : name = map['name'],
-        price = map['price_usd'],
-        percentChange_1h = map['percent_change_1h'],
-        symbol = map['symbol'];
-}
-
-abstract class CryptoRepository {
-  Future<List<Crypto>> fetchCurrencies();
+  Crypto.fromJson(Map<String, dynamic> json)
+      : this.id = json['id'],
+        this.name = json['name'],
+        this.image = json['image'],
+        this.symbol = json['symbol'],
+        this.rank = json['market_cap_rank'],
+        this.price = json['current_price'],
+        this.marketCap = json['market_cap'],
+        this.percentChange_1h = json['price_change_percentage_1h_in_currency'];
 }
 
 class FetchDataException implements Exception {
@@ -27,5 +40,32 @@ class FetchDataException implements Exception {
   String toString() {
     if (_message == null) return "Exception";
     return "Exception: $_message";
+  }
+}
+
+class CryptoComparable {
+  final CryptoColumn column;
+  final Crypto crypto;
+
+  CryptoComparable(this.column, this.crypto);
+
+  compareTo(CryptoComparable otherComparable) {
+    final self = crypto;
+    final other = otherComparable.crypto;
+
+    switch (column) {
+      case CryptoColumn.id:
+        return self.id.compareTo(other.id);
+      case CryptoColumn.rank:
+        return self.rank.compareTo(other.rank);
+      case CryptoColumn.name:
+        return self.name.compareTo(other.name);
+      case CryptoColumn.price:
+        return self.price.compareTo(other.price);
+      case CryptoColumn.marketCap:
+        return self.marketCap.compareTo(other.marketCap);
+      case CryptoColumn.percentChange_1h:
+        return self.percentChange_1h.compareTo(other.percentChange_1h);
+    }
   }
 }
